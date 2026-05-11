@@ -1,3 +1,5 @@
+#include "alu_ops.svh"
+
 module alu (
     input logic [7:0] a,
     input logic [7:0] b,
