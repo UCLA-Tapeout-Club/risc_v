@@ -9,7 +9,7 @@ module alu (
 );
 
 always_comb begin
-    result = a;
+    // result = a;
     case (operation)
         ADD: result = a + b;
         SUB: result = a - b;
@@ -18,6 +18,7 @@ always_comb begin
         AND: result = a & b;
         OR: result = a | b;
         XOR: result = a ^ b;
+        default: result = a;
     endcase
 end
 
