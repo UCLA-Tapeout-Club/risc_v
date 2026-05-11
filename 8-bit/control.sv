@@ -1,4 +1,4 @@
-#include "alu_ops.svh"
+`include "alu_ops.svh"
 
 module control (
     input logic [7:0] insn,
@@ -14,7 +14,7 @@ module control (
 );
 
 assign opcode = insn[7];
-assign alu_ctrl = insn[2:0];
+assign alu_ctrl = alu_ops'(insn[2:0]);
 assign write = (alu_ctrl == 3'b111) ? 1'b1 : 1'b0;
 assign rsd_addr = insn[6:5];
 assign rs2_addr = insn[4:3];

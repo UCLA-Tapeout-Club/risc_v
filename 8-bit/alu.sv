@@ -1,4 +1,4 @@
-#include "alu_ops.svh"
+`include "alu_ops.svh"
 
 module alu (
     input logic [7:0] a,

@@ -7,8 +7,8 @@ module rf (
 
     input logic [7:0] write_data,
 
-    output logic [1:0] rsd_data,
-    output logic [1:0] rs2_data
+    output logic [7:0] rsd_data,
+    output logic [7:0] rs2_data
 );
 
 logic [7:0] registers [4];
