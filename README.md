@@ -25,3 +25,6 @@ where WRITE is a special case of the alu operation that doesn't modify the regis
 
 on reset, registers in reg file are initialized to some constant value. %0 = 0 always, %1 = 1, %2 =2, %3 = 3.
 
+modified data path diagram:
+<img width="2640" height="1485" alt="shitty_riscv8" src="https://github.com/user-attachments/assets/b2c84609-035f-4f86-b6cb-0f190b55fb69" />
+
