@@ -15,9 +15,13 @@ pc_module program_counter (
 
 logic [7:0] insn;
 imem instruction_memory (
+    .clk(clk),
     .rst_n(rst_n),
     .pc(pc_out),
-    .insn(insn)
+    .insn(insn),
+    .write_enable(1'b0),
+    .waddr('0),
+    .wdata('0)
 );
 
 alu_ops alu_ctrl;
