@@ -1,6 +1,7 @@
 module rf (
     input logic clk,
     input logic rst_n,
+    input logic cpu_enable,
 
     input logic [1:0] rsd_addr,
     input logic [1:0] rs2_addr,
@@ -22,7 +23,7 @@ always_ff @(posedge clk or negedge rst_n) begin
         registers[1] <= 8'h01;
         registers[2] <= 8'h02;
         registers[3] <= 8'h03;
-    end else begin
+    end else if (cpu_enable) begin
         if (rsd_addr != 2'b00) registers[rsd_addr] <= write_data;
     end
 end

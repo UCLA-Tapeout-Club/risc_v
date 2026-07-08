@@ -55,3 +55,16 @@ the spi module is going to support the following commands:
 why 0x8X? we are going to dedicate one bit for write and read and the last 4 digits to be the address 0-3
 
 The SPI protocal has 3 states: A state to receive Command/Adress byte, a state to receive instruction data, a state to shift the instruction data onto the mosi bus 
+
+overall structure:
+cpu_spi_top
+  ├── spi_slave
+  │     └── synchronizer
+  └── cpu_top
+        ├── run_controller
+        ├── pc
+        ├── imem
+        ├── control
+        ├── rf
+        ├── alu
+        └── dmem

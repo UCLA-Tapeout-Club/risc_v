@@ -1,15 +1,36 @@
 `include "alu_ops.svh"
-
-module top(
+/*
+CPU only runs when cpu_enable is high. This is controlled by the run_controller module.
+Technically only imem is writeable when cpu_enable is low, but the CPU will not run unless cpu_enable is high.
+*/
+module cpu_top(
     input logic clk,
     input logic rst_n,
-    output logic [7:0] current_dmem_value
+    input logic cpu_start, //use for modules that store state
+    input logic cpu_step,
+    input logic imem_write_enable,
+    input logic [1:0] imem_waddr,
+    input logic [7:0] imem_wdata,
+    output logic [7:0] current_dmem_value,
+    output logic [1:0] pc_out,
+    output logic cpu_done
 );
 
-logic [1:0] pc_out;
-pc_module program_counter (
+logic cpu_enable;
+run_controller cpu_run_controller (
     .clk(clk),
     .rst_n(rst_n),
+    .cpu_start(cpu_start),
+    .cpu_step(cpu_step),
+    .pc_value(pc_out),
+    .cpu_enable(cpu_enable),
+    .cpu_done(cpu_done)
+);
+
+pc program_counter (
+    .clk(clk),
+    .rst_n(rst_n),
+    .cpu_enable(cpu_enable),
     .pc_out(pc_out)
 );
 
@@ -19,9 +40,9 @@ imem instruction_memory (
     .rst_n(rst_n),
     .pc(pc_out),
     .insn(insn),
-    .write_enable(1'b0),
-    .waddr('0),
-    .wdata('0)
+    .write_enable(imem_write_enable),
+    .waddr(imem_waddr),
+    .wdata(imem_wdata)
 );
 
 alu_ops alu_ctrl;
@@ -46,6 +67,7 @@ logic [7:0] rs2_data;
 rf register_file (
     .clk(clk),
     .rst_n(rst_n),
+    .cpu_enable(cpu_enable),
 
     .rsd_addr(rsd_addr),
     .rs2_addr(rs2_addr),
@@ -56,7 +78,7 @@ rf register_file (
 );
 
 logic [7:0] b;
-assign b = (opcode == 1) ? rs2_addr : rs2_data;
+assign b = (opcode == 1) ? {6'b000000, rs2_addr} : rs2_data;
 alu ALU (
     .a(rsd_data),
     .b(b),
@@ -69,7 +91,7 @@ dmem data_memory (
     .clk(clk),
     .rst_n(rst_n),
 
-    .write(write),
+    .write(write && cpu_enable),
     .alu_out(write_data),
     .current_dmem_value(current_dmem_value)
 );
