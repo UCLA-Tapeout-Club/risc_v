@@ -28,3 +28,30 @@ on reset, registers in reg file are initialized to some constant value. %0 = 0 a
 modified data path diagram:
 <img width="2640" height="1485" alt="shitty_riscv8" src="https://github.com/user-attachments/assets/b2c84609-035f-4f86-b6cb-0f190b55fb69" />
 
+SPI 
+MAC python script
+-> RP2040 (receive command and send SPI bytes)
+-> SPI module (receive bytes packet and write to IMEM)
+-> CPU (run program)
+-> SPI module (read DMEM output)
+-> RP2040 (send output to MAC python script)
+
+think of the RP2040 as the master (can probably write up some python code and connect it to the RP2040 pins)
+and the SPI module is going to be the slave (the rtl im writing)
+
+The spi module receives a packet when the chip select is low. That will consist of two bytes.
+byte 1 is the command/address byte
+byte 2 is the data byte (if applicable)
+
+the spi module is going to support the following commands:
+0x80 data -> write imem[0] = data
+0x81 data -> write imem[1] = data
+0x82 data -> write imem[2] = data
+0x83 data -> write imem[3] = data
+0x84 data -> control register, data[0] = cpu_start, data[1] = cpu_step
+0x05 0x00 -> read dmem_value on miso  (for debug purpouses)
+0x06 0x00 -> read pc_value on miso. (for debug purpouses)
+
+why 0x8X? we are going to dedicate one bit for write and read and the last 4 digits to be the address 0-3
+
+The SPI protocal has 3 states: A state to receive Command/Adress byte, a state to receive instruction data, a state to shift the instruction data onto the mosi bus 
