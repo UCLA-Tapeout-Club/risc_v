@@ -7,6 +7,7 @@ module cpu_spi_top (
     input logic cs_n,
     output logic miso,
 
+    // Alternative way to get the current dmem value and pc value out of the cpu for testing
     output logic [7:0] current_dmem_value,
     output logic [1:0] pc_out,
     output logic cpu_done
