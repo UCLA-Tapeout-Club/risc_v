@@ -68,3 +68,9 @@ cpu_spi_top
         ├── rf
         ├── alu
         └── dmem
+
+Pin mapping: 
+uio[0] - GPIO21 - CS
+uio[1] - GPIO22 - MOSI
+uio[2] - GPIO23 - MISO
+uio[3] - GPIO24 - SCK
